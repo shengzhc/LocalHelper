@@ -5,9 +5,10 @@ var app = express();
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var winston = require('winston');
 var router = require('./components/router');
 var errorHandler = require('./components/errorHandler');
-var winston = require('winston');
+var mongodb = require('./components/mongodb');
 
 var logger = new (winston.Logger)({
 	transports:[
@@ -18,7 +19,6 @@ var logger = new (winston.Logger)({
 		new (winston.transports.File)({filename:'./log/exception.log', handleExceptions: true, colorize: true, timestamp: true})
 	]
 });
-
 global.logger = logger;
 
 app.set('strict routing', true);
@@ -33,11 +33,15 @@ app.use(bodyParser.text({defaultCharset: 'utf-8', type:'text/plain'}));
 app.use(router);
 app.use(errorHandler);
 
-app.listen(3000, function() {
-	console.log('Server starts listening to PORT 3000.')
+mongodb.connect(function(err, db) {
+	if (err || !db) return;
+	app.listen(3000, function(err) {
+		if (err) {
+			global.logger.error(err.toString());
+			exit(-1);
+		} else {
+			global.db = db;
+			global.logger.info('Server starts to listen to PORT 3000');
+		}
+	});
 });
-
-/*
-Work to do:
-3. Define Routes 
-*/
