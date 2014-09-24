@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var mongodb = new Object();
+
 mongodb.connect = function(callback) {
 	var connection = mongoose.createConnection('localhost', 'localhelper', 27017);
 	connection.on('error', function(err) {
