@@ -1,4 +1,4 @@
-var userModel = require('../models/userModel.js');
+var UserModel = global.db.model('UserModel');
 
 /**
  * Post user create
@@ -7,7 +7,7 @@ var userModel = require('../models/userModel.js');
  * @param next
  */
 exports.create = function(req, res, next) {
-    var user = new userModel({
+    var user = new UserModel({
         username: req.body.username,
         password: req.body.password
     });
@@ -30,7 +30,7 @@ exports.list = function(req, res, next) {
     if (req.body.name) {
         query.name = req.body.name;
     }
-    userModel.find(query, function(err, users) {
+    UserModel.find(query, function(err, users) {
         if (err) next(err);
         if (users) {
             res.write(JSON.stringify(users));
@@ -53,7 +53,7 @@ exports.edit = function(req, res, next) {
         address: req.body.address,
         phone: req.body.phone
     };
-    userModel.update(conditions, updates, function(err, user) {
+    UserModel.update(conditions, updates, function(err, user) {
         if (err) next(err);
         res.write(JSON.stringify(user));
     });
@@ -69,12 +69,18 @@ exports.destroy = function(req, res, next) {
     var conditions = {
         username: req.body.username
     };
-    userModel.find(conditions, function(err, user) {
+    UserModel.find(conditions, function(err, user) {
         if (err) next(err);
-        userModel.remove(function(err, user) {
+        UserModel.remove(function(err, user) {
             if (err) next(err);
             res.write(JSON.stringify({result: 'success'}));
         });
     });
+};
+
+exports.test = function(req, res, next) {
+    var user = new UserModel();
+    user.test();
+    return next();
 };
 

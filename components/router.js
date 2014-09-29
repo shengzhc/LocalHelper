@@ -1,8 +1,15 @@
 var router = require('express').Router();
+var tickets = require('../controllers/tickets');
+var users = require('../controllers/users');
 
 router.get('/', function(req, res, next) {
 	res.send('Welcome to Local Helper');
 	return next();
+});
+
+//Test Calls
+router.get('/test', function(req, res, next) {
+	users.test(req, res, next);
 });
 
 //User Calls

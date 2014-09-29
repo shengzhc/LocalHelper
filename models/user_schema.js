@@ -14,4 +14,8 @@ var user_schema = mongoose.Schema({
 	create_date : {type: Date, default: Date.now}
 });
 
+user_schema.methods.test = function() {
+	global.logger.info('this is a user schema test');
+}
+
 module.exports = user_schema;
