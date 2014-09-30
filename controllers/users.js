@@ -1,11 +1,24 @@
 var UserModel = global.db.model('UserModel');
-
 /**
  * Post user create
  * @param req
  * @param res
  * @param next
  */
+exports.retrieve = function(req, res, next) {
+    var email = req.params.id.toLowerCase();
+    UserModel.findOne({'email': email}, function(err, user) {
+        if (err) return next(err);
+        if (user) res.status(200).send(user);
+        else res.status(200).send('non user found');
+        return next();
+    });
+}
+
+exports.register = function(req, res, next) {
+
+};
+
 exports.create = function(req, res, next) {
     var user = new UserModel({
         username: req.body.username,

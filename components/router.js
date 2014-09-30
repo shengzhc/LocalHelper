@@ -1,4 +1,5 @@
 var router = require('express').Router();
+var validator = require('../controllers/input_validator')
 var tickets = require('../controllers/tickets');
 var users = require('../controllers/users');
 
@@ -7,21 +8,9 @@ router.get('/', function(req, res, next) {
 	return next();
 });
 
-//Test Calls
-router.get('/test', function(req, res, next) {
-	users.test(req, res, next);
-});
-
 //User Calls
-router.get('/users/:id', function(req, res, next) {
-	res.send('Get User Details');
-	return next();
-});
-
-router.post('/users', function(req, res, next) {
-	res.send('Sign up');
-	return next();
-});
+router.get('/users/:id', validator.users_retrieve, users.retrieve);
+router.post('/users', users.register);
 
 //Ticket Calls
 router.get('/tickets/:id', function(req, res, next) {
