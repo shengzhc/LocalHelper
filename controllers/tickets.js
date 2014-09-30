@@ -1,4 +1,5 @@
 var TicketModel = global.db.model('TicketModel');
+var async = require('async');
 /**
  * Post Ticket create
  *

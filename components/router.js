@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
 //User Calls
 router.get('/users/:id', validator.users_retrieve, users.retrieve);
-router.post('/users', users.register);
+router.post('/users', validator.users_register, users.register);
 
 //Ticket Calls
 router.get('/tickets/:id', function(req, res, next) {

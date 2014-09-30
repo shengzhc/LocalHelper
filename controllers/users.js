@@ -1,4 +1,5 @@
 var UserModel = global.db.model('UserModel');
+var async = require('async');
 /**
  * Post user create
  * @param req
@@ -9,14 +10,37 @@ exports.retrieve = function(req, res, next) {
     var email = req.params.id.toLowerCase();
     UserModel.findOne({'email': email}, function(err, user) {
         if (err) return next(err);
-        if (user) res.status(200).send(user);
-        else res.status(200).send('non user found');
+        if (!user) {
+            var err = new Error('non user found');
+            return next(err);
+        }
+        res.status(200).send({status:200, more_info:user});
         return next();
     });
 }
 
 exports.register = function(req, res, next) {
+    var email = req.params['email'], password = req.params['password'];
+    /* 
+        Few things to notice:
+            1. Whether to use email as _id
+            2. If not, please adding index for email
+            3. We dont need to save user password, the best practice is to generate a random seed and crypto the seed along with the password, the final code will be saved to password field. 
+    */
 
+    UserModel.findOne({'email': email}, function(err, user) {
+        if (err) return next(err);
+        if (user) {
+            var err = new Error('the email address has been registered');
+            return next(err);
+        }
+
+        var user = new UserModel({email: email, password: password});
+        user.save(function(err) {
+            if (err) return next(err);
+            res.status(200).send({status:200, more_info:user});
+        });
+    })
 };
 
 exports.create = function(req, res, next) {
