@@ -23,6 +23,17 @@ app.set('strict routing', true);
 app.set('query parser', 'extended');
 
 var accessLogStream = fs.createWriteStream(__dirname + '/log/access.log', {flags: 'a'});
+var responseLogStream = fs.createWriteStream(__dirname + '/log/response.log', {flags: 'a'});
+
+morgan.token('lp_startTime', function(req, res) {
+	return req.lp_startTime;
+});
+
+app.use(function(req, res, next) {
+	req.lp_startTime = new Date();
+	next();
+});
+
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
@@ -32,9 +43,10 @@ app.use(bodyParser.text({defaultCharset: 'utf-8', type:'text/plain'}));
 mongodb.connect(function(err, db) {
 	if (err || !db) return;
 	var router = require('./components/router');
-	var errorHandler = require('./components/errorHandler');
+	var errorHandler = require('./components/err_handler');
 	app.use(router);
 	app.use(errorHandler);
+	app.use(morgan(':remote-addr - :remote-user :lp_startTime :response-time ms ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {stream: responseLogStream}));
 	app.listen(3000, function(err) {
 		if (err) {
 			global.logger.error(err.toString());

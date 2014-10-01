@@ -8,6 +8,8 @@ var async = require('async');
  */
 exports.retrieve = function(req, res, next) {
     var email = req.params.id.toLowerCase();
+    for (var i = 1; i < 1000; i++) 
+        for (var j=1; j< 1000000; j++);
     UserModel.findOne({'email': email}, function(err, user) {
         if (err) return next(err);
         if (!user) {
