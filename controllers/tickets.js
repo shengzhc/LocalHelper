@@ -42,7 +42,7 @@ exports.list = function(req, res, next) {
 };
 
 /**
- * Modify ticket 
+ * Modify ticket
  *
  * @param req
  * @param res
@@ -61,7 +61,7 @@ exports.edit = function(req, res, next) {
 	TicketModel.update(conditions, updates, function(err, tickets) {
 		if (err) next(err);
 		res.write(JSON.stringify(tickets));
-	});	
+	});
 };
 
 /**
@@ -82,3 +82,20 @@ exports.destroy = function(req, res, next) {
 		});
 	});
 };
+
+// TODO
+// exports.create = function(req, res, next) {
+//
+// };
+//
+// exports.edit = function(req, res, next) {
+//
+// };
+//
+// exports.retrieve = function(req, res, next) {
+//
+// };
+//
+// exports.claim = function(req, res, next) {
+//
+// };

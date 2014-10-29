@@ -1,5 +1,6 @@
 var UserModel = global.db.model('UserModel');
 var async = require('async');
+
 /**
  * Post user create
  * @param req
@@ -8,7 +9,7 @@ var async = require('async');
  */
 exports.retrieve = function(req, res, next) {
     var email = req.params.id.toLowerCase();
-    for (var i = 1; i < 1000; i++) 
+    for (var i = 1; i < 1000; i++)
         for (var j=1; j< 1000000; j++);
     UserModel.findOne({'email': email}, function(err, user) {
         if (err) return next(err);
@@ -23,11 +24,11 @@ exports.retrieve = function(req, res, next) {
 
 exports.register = function(req, res, next) {
     var email = req.params['email'], password = req.params['password'];
-    /* 
+    /*
         Few things to notice:
             1. Whether to use email as _id
             2. If not, please adding index for email
-            3. We dont need to save user password, the best practice is to generate a random seed and crypto the seed along with the password, the final code will be saved to password field. 
+            3. We dont need to save user password, the best practice is to generate a random seed and crypto the seed along with the password, the final code will be saved to password field.
     */
 
     UserModel.findOne({'email': email}, function(err, user) {
@@ -123,3 +124,24 @@ exports.test = function(req, res, next) {
     return next();
 };
 
+
+// TODO
+// exports.signin = function(req, res, next) {
+//
+// };
+//
+// exports.signout = function(req, res, next) {
+//
+// };
+//
+// exports.edit = function(req, res, next) {
+//
+// };
+//
+// exports.retrieve = function(req, res, next) {
+//
+// };
+//
+// exports.deactivate = function(req, res, next) {
+//
+// };

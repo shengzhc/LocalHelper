@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var validator = require('../controllers/input_validator')
+var input_validator = require('../controllers/input_validator')
 var tickets = require('../controllers/tickets');
 var users = require('../controllers/users');
 
@@ -9,8 +9,8 @@ router.get('/', function(req, res, next) {
 });
 
 //User Calls
-router.get('/users/:id', validator.users_retrieve, users.retrieve);
-router.post('/users', validator.users_register, users.register);
+router.get('/users/:id', input_validator.users_retrieve, users.retrieve);
+router.post('/users', input_validator.users_register, users.register);
 
 //Ticket Calls
 router.get('/tickets/:id', function(req, res, next) {
