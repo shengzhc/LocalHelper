@@ -8,7 +8,7 @@ function registerSchemas(db) {
 			db.model(key, schemas[key]);
 		}
 	}
-};
+}
 
 mongodb.connect = function(callback) {
 	var connection = mongoose.createConnection('localhost', 'localhelper', 27017);

@@ -1,13 +1,14 @@
 var TicketModel = global.db.model('TicketModel');
 var async = require('async');
+
 /**
- * Post Ticket create
+ * Create Ticket
  *
  * @param req
  * @param res
  * @param next
  */
-exports.create = function(req, res, next) {
+exports.add = function(req, res, next) {
 	var ticket = new TicketModel({
 		summary: req.body.summary,
 		status: 'open',
@@ -25,13 +26,13 @@ exports.create = function(req, res, next) {
 };
 
 /**
- * Get Ticket list based on query strings
+ * Get all tickets list based on query strings
  *
  * @param req
  * @param res
  * @param next
  */
-exports.list = function(req, res, next) {
+exports.getTickets = function(req, res, next) {
 	var query = req.body;
 	TicketModel.find(query, function(err, tickets) {
 		if (err) next(err);
@@ -42,13 +43,24 @@ exports.list = function(req, res, next) {
 };
 
 /**
- * Modify ticket
+ * Get a ticket based on the id
  *
  * @param req
  * @param res
  * @param next
  */
-exports.edit = function(req, res, next) {
+exports.getTicket = function(req, res, next) {
+
+};
+
+/**
+ * Update ticket
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.update = function(req, res, next) {
 	var conditions = {
 		ticketId: req.body.ticketId
 	};
@@ -65,12 +77,12 @@ exports.edit = function(req, res, next) {
 };
 
 /**
- * Delete all the tickets based on criteria
+ * Delete all the tickets based on request
  * @param req
  * @param res
  * @param next
  */
-exports.destroy = function(req, res, next) {
+exports.del = function(req, res, next) {
 	var conditions = {
 		ticketId: req.body.ticketId
 	};
@@ -83,19 +95,13 @@ exports.destroy = function(req, res, next) {
 	});
 };
 
-// TODO
-// exports.create = function(req, res, next) {
-//
-// };
-//
-// exports.edit = function(req, res, next) {
-//
-// };
-//
-// exports.retrieve = function(req, res, next) {
-//
-// };
-//
-// exports.claim = function(req, res, next) {
-//
-// };
+/**
+ * Claim to take the ticket
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.claim = function(req, res, next) {
+
+};
