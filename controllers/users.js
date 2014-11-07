@@ -17,7 +17,7 @@ exports.signup = function(req, res, next) {
             user.password = securePassword;
             user.save(function(err) {
                 if (err) return next(err);
-                sessionManager.generateSecureToken(function(err) {
+                sessionManager.activateSession(function(err) {
                     if (err) return next(err);
                     res.status(200).send({status:200, more_info:user});
                     return next();
@@ -36,7 +36,7 @@ exports.signin = function(req, res, next) {
         user.verifyPassword(password, function(err, isValid) {
             if (err) return next(err);
             if (!isValid) return next(new Error('the password does not match the account'));
-            sessionManager.generateSecureToken(function(err) {
+            sessionManager.activateSession(function(err) {
                 if (err) return next(err):
                 res.status(200).send({status:200, more_info:{message:'Welcome to LocalHelper'}});
                 return next();
@@ -50,8 +50,11 @@ exports.signout = function(req, res, next) {
     UserModel.findByEmail(email, function(err, user) {
         if (err) return next(err);
         if (user == NULL || typeof user == "undefined") return next(new Error('the account does not exist'));
-        res.status(200).send({status:200, more_info:{message:'Looking forward to see you again'}});
-        return next();
+        session_manager.deactivateSession(req, function(err) {
+            if (err) return next(err):
+            res.status(200).send({status:200, more_info:{message:'Looking forward to see you again'}});
+            return next();
+        });
     });
 };
 
@@ -63,8 +66,15 @@ exports.deactivate = function(req, res, next) {
         user.verifyPassword(password, function(err, isValid) {
             if (err) return next(err);
             if (!isValid) return next(new Error('the password does not match the account'));
-            user.
-            res.status(200).send({status:200, more_info:{message:'Thanks for using LocalHelper'}});
+            session_manager.deactivateSession(req, function(err) {
+                if (err) return next(err);
+                user.is_archived = true;
+                user.save(function(err) {
+                    if (err) return next(err);
+                    res.status(200).send({status:200, more_info:{message:'Thanks for using LocalHelper'}});
+                    return next();
+                });
+            });
         });
     });
 };
@@ -99,12 +109,3 @@ exports.retrieve = function(req, res, next) {
         return next();
     });
 };
-
-
-
-
-// TODO
-// exports.retrieve = function(req, res, next) {
-//
-// };
-//
