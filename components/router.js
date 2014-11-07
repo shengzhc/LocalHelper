@@ -11,8 +11,9 @@ router.get('/', function(req, res, next) {
 //User Calls
 router.post('/signup', input_validator.user_signup, users.signup);
 router.post('/signin', input_validator.user_signin, users.signin);
-router.post('/users/:id/signout', input_validator.user_signout, access_validator.access_validate, users.signout);
-router.put('/users/:id/deactivate', input_validator.user_deactivate, access_validator.access_validate, users_deactivate);
+router.post('/users/:id/signout', access_validator.access_validate, input_validator.user_signout, users.signout);
+router.put('/users/:id/deactivate', access_validator.access_validate, input_validator.user_deactivate, users_deactivate);
+router.put('/users/:id', access_validator.access_validate, input_validator.user_update, users.update)
 
 //Ticket Calls
 router.post('/tickets', tickets.add);

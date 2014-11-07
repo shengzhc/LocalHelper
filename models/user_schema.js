@@ -44,5 +44,9 @@ user_schema.methods.verifyPassword = function(userPassword, callback) {
 	return callback(null, this.seed === decrypted);
 };
 
+user_schema.methods.updateUserDetails = function(fields, callback) {
+
+};
+
 
 module.exports = user_schema;

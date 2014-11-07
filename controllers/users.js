@@ -79,21 +79,14 @@ exports.deactivate = function(req, res, next) {
     });
 };
 
-exports.edit = function(req, res, next) {
-    var conditions = {
-        username: req.body.username
-    };
-    var updates = {
-        name: req.body.name,
-        address: req.body.address,
-        phone: req.body.phone
-    };
-    UserModel.update(conditions, updates, function(err, user) {
-        if (err) next(err);
-        res.write(JSON.stringify(user));
+exports.update = function(req, res, next) {
+    var email = req.params['email'];
+    UserModel.findByEmail(email, function(err, user) {
+        if (err) return next(err);
+        if (user == null || typeof user == "undefined") return next(new Error('the account does not exist'));
+        user.updateUserDetails(req.params, function(err))
     });
 };
-
 
 exports.retrieve = function(req, res, next) {
     var email = req.params.id.toLowerCase();
