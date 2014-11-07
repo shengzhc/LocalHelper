@@ -22,6 +22,7 @@ router.get('/tickets/:id', tickets.getTicket);
 router.put('/tickets/:id', tickets.update);
 router.del('/tickets/:id', tickets.del);
 
+
 //router.get('/tickets/:id', function(req, res, next) {
 //	res.send('Get Ticket Details');
 //	return next();
