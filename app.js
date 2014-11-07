@@ -49,6 +49,10 @@ mongodb.connect(function(err, db) {
 	app.use(router);
 	app.use(errorHandler);
 	app.use(morgan(':remote-addr - :remote-user :lp_startTime :response-time ms ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {stream: responseLogStream}));
+	app.use(function(req, res, next) {
+		// dummy function to end the expressjs middle-ware queue
+		res.end();
+	});
 	app.listen(3000, function(err) {
 		if (err) {
 			global.logger.error(err.toString());

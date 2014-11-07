@@ -17,7 +17,7 @@ var user_schema = mongoose.Schema({
 	comments : [{}],
 	is_archived : {type:Boolean, default: false},
 	create_date : {type: Date, default: Date.now}
-});
+}, {collection: 'users'});
 
 user_schema.statics.findByEmail = function(email, callback) {
 	this.findOne({email: email}, function(err, user) {

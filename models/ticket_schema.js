@@ -8,7 +8,7 @@ var ticket_schema = mongoose.Schema({
 	category : [String],
 	comments : [{}],
 	requests : [{user_id: mongoose.Schema.Types.ObjectId, request_date: Date, message: String}]
-});
+}, {collection:'tickets'});
 
 ticket_schema.methods.test = function() {
 	global.logger.info('this is a ticket schema test');

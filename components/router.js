@@ -5,7 +5,7 @@ var tickets = require('../controllers/tickets');
 var users = require('../controllers/users');
 
 router.get('/', function(req, res, next) {
-	res.send('Welcome to Local Helper');
+	res.status(200).send({status:200, more_info:{message:'Welcome to LocalHelper'}});
 	return next();
 });
 
