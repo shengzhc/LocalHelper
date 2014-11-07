@@ -1,5 +1,5 @@
 var UserModel = global.db.model('UserModel');
-var sessionManager = require('./session_manager');
+var session_manager = require('./session_manager');
 var async = require('async');
 
 exports.signup = function(req, res, next) {

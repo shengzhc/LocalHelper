@@ -36,7 +36,6 @@ user_schema.methods.generateSecurePassword = function(userPassword, callback) {
 		this.seed = seed;
 		return callback(null, securePassword);
 	});
-
 };
 
 user_schema.methods.verifyPassword = function(userPassword, callback) {

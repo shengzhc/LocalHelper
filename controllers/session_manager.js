@@ -25,4 +25,13 @@ session_manager.deactivateSession = function(req, callback) {
 	}
 };
 
+session_manager.verifySession = function(req, callback) {
+		if (req.session && req.session.token) {
+			if (session_manager.secureTokens.indexOf(req.session.token) >=0) {
+				return callback(null, true);
+			}
+		}
+		return callback(null, false);
+};
+
 module.exports = session_manager;
