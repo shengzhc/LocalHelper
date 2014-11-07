@@ -31,7 +31,7 @@ exports.signin = function(req, res, next) {
     var email = req.params['email'].toLowerCase(), password = req.params['password'];
     UserModel.findByEmail(email, function(err, user) {
         if (err) return next(err);
-        if (user == NULL || typeof user == "undefined") return next(new Error('the account does not exist'));
+        if (user == null || typeof user === "undefined") return next(new Error('the account does not exist'));
 
         user.verifyPassword(password, function(err, isValid) {
             if (err) return next(err);
@@ -49,7 +49,7 @@ exports.signout = function(req, res, next) {
     var email = req.params['email'].toLowerCase();
     UserModel.findByEmail(email, function(err, user) {
         if (err) return next(err);
-        if (user == NULL || typeof user == "undefined") return next(new Error('the account does not exist'));
+        if (user == null || typeof user === "undefined") return next(new Error('the account does not exist'));
         session_manager.deactivateSession(req, function(err) {
             if (err) return next(err):
             res.status(200).send({status:200, more_info:{message:'Looking forward to see you again'}});
@@ -58,47 +58,25 @@ exports.signout = function(req, res, next) {
     });
 };
 
-exports.deactivate = function(req, res, next) {
-    var email = req.params['email'].toLowerCase(), password = req.params['password'];
-    UserModel.findByEmail(email, function(err, user) {
-        if (err) return next(err);
-        if (user == NULL || typeof user == "undefined") return next(new Error('the account does not exist'));
-        user.verifyPassword(password, function(err, isValid) {
-            if (err) return next(err);
-            if (!isValid) return next(new Error('the password does not match the account'));
-            session_manager.deactivateSession(req, function(err) {
-                if (err) return next(err);
-                user.is_archived = true;
-                user.save(function(err) {
-                    if (err) return next(err);
-                    res.status(200).send({status:200, more_info:{message:'Thanks for using LocalHelper'}});
-                    return next();
-                });
-            });
-        });
-    });
-};
-
 exports.update = function(req, res, next) {
     var email = req.params['email'];
     UserModel.findByEmail(email, function(err, user) {
         if (err) return next(err);
-        if (user == null || typeof user == "undefined") return next(new Error('the account does not exist'));
-        user.updateUserDetails(req.params, function(err))
+        if (user == null || typeof user === "undefined") return next(new Error('the account does not exist'));
+        user.updateUserDetails(req.params, function(err, updatedUser) {
+            if (err) return next(err);
+            res.status(200).send({status:200, more_info:user});
+            return next();
+        });
     });
 };
 
 exports.retrieve = function(req, res, next) {
     var email = req.params.id.toLowerCase();
-    for (var i = 1; i < 1000; i++)
-        for (var j=1; j< 1000000; j++);
-    UserModel.findOne({'email': email}, function(err, user) {
+    UserModel.findByEmail(email, function(err, user) {
         if (err) return next(err);
-        if (!user) {
-            var err = new Error('non user found');
-            return next(err);
-        }
+        if (user == null || typeof user === "undefined") return next(new Error('the account does not exist'));
         res.status(200).send({status:200, more_info:user});
-        return next();
+        retur next();
     });
 };

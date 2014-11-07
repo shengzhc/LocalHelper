@@ -45,7 +45,30 @@ user_schema.methods.verifyPassword = function(userPassword, callback) {
 };
 
 user_schema.methods.updateUserDetails = function(fields, callback) {
+	if (fields.user_name && typeof fields.user_name !== "undefined") {
+		this.user_name = fields.user_name;
+	}
 
+	if (fields.nick_name && typeof fields.nick_name !== "undefined") {
+		this.nick_name = fields.nick_name;
+	}
+
+	if (fields.cellphone && typeof fields.cellphone !== "undefined") {
+		this.cellphone = fields.cellphone;
+	}
+
+	if (fields.address && typeof fields.addess instanceof "Object") {
+		this.address = fields.address;
+	}
+
+	if (fields.signature && typeof fields.isgnature !== "undefined") {
+		this.signature = fields.signature;
+	}
+
+	this.save(function(err) {
+		if (err) return callback(err, null);
+		return callback(null, this);
+	});
 };
 
 
