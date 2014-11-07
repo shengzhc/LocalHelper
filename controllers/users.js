@@ -1,4 +1,5 @@
 var UserModel = global.db.model('UserModel');
+var sessionManager = require('./session_manager');
 var async = require('async');
 
 exports.signup = function(req, res, next) {
@@ -16,8 +17,11 @@ exports.signup = function(req, res, next) {
             user.password = securePassword;
             user.save(function(err) {
                 if (err) return next(err);
-                res.status(200).send({status:200, more_info:user});
-                return next();
+                sessionManager.generateSecureToken(function(err) {
+                    if (err) return next(err);
+                    res.status(200).send({status:200, more_info:user});
+                    return next();
+                });
             });
         });
     });
@@ -32,8 +36,11 @@ exports.signin = function(req, res, next) {
         user.verifyPassword(password, function(err, isValid) {
             if (err) return next(err);
             if (!isValid) return next(new Error('the password does not match the account'));
-            res.status(200).send({status:200, more_info:{message:'Welcome to LocalHelper'}});
-            return next();
+            sessionManager.generateSecureToken(function(err) {
+                if (err) return next(err):
+                res.status(200).send({status:200, more_info:{message:'Welcome to LocalHelper'}});
+                return next();
+            });
         });
     });
 };
