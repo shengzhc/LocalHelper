@@ -9,8 +9,10 @@ router.get('/', function(req, res, next) {
 });
 
 //User Calls
-router.get('/users/:id', input_validator.users_retrieve, users.retrieve);
-router.post('/users', input_validator.users_register, users.register);
+router.post('/signup', input_validator.user_signup, users.signup);
+router.post('/signin', input_validator.user_signin, users.signin);
+router.post('/users/:id/signout', input_validator.user_signout, access_validator.access_validate, users.signout);
+router.put('/users/:id/deactivate', input_validator.user_deactivate, access_validator.access_validate, users_deactivate);
 
 //Ticket Calls
 router.post('/tickets', tickets.add);
