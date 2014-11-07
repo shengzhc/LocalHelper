@@ -71,5 +71,4 @@ user_schema.methods.updateUserDetails = function(fields, callback) {
 	});
 };
 
-
 module.exports = user_schema;

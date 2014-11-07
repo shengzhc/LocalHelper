@@ -37,7 +37,7 @@ exports.signin = function(req, res, next) {
             if (err) return next(err);
             if (!isValid) return next(new Error('the password does not match the account'));
             sessionManager.activateSession(function(err) {
-                if (err) return next(err):
+                if (err) return next(err);
                 res.status(200).send({status:200, more_info:{message:'Welcome to LocalHelper'}});
                 return next();
             });
@@ -51,7 +51,7 @@ exports.signout = function(req, res, next) {
         if (err) return next(err);
         if (user == null || typeof user === "undefined") return next(new Error('the account does not exist'));
         session_manager.deactivateSession(req, function(err) {
-            if (err) return next(err):
+            if (err) return next(err);
             res.status(200).send({status:200, more_info:{message:'Looking forward to see you again'}});
             return next();
         });
@@ -77,6 +77,20 @@ exports.retrieve = function(req, res, next) {
         if (err) return next(err);
         if (user == null || typeof user === "undefined") return next(new Error('the account does not exist'));
         res.status(200).send({status:200, more_info:user});
-        retur next();
+        return next();
+    });
+};
+
+exports.deactivate = function(req, res, next) {
+    var email = req.params['email'].toLowerCase();
+    UserModel.findByEmail(email, function(err, user) {
+        if (err) return next(err);
+        if (user == null || typeof user === "undefined") return next(new Error('the account does not exist'));
+        user.is_archived = true;
+        user.save(function(err) {
+            if (err) return next(err);
+            res.status(200).send({status:200, more_info:user});
+            return next();
+        });
     });
 };

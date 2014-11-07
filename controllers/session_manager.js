@@ -10,7 +10,7 @@ session_manager.activateSession = function(req, callback) {
 		var secureToken = buf.toString('hex');
 		session_manager.secureTokens.add(secureToken);
 		req.session.token = secureToken;
-		return callback(null);
+		return callback();
 	});
 };
 
@@ -21,7 +21,7 @@ session_manager.deactivateSession = function(req, callback) {
 			return callback(err);
 		});
 	} else {
-		return callback(null):
+		return callback();
 	}
 };
 

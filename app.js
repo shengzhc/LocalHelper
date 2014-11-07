@@ -10,7 +10,7 @@ var session = require('express-session');
 
 global.logger = new (winston.Logger)({
 	transports:[
-		new (winston.transports.Console)({level:'info', colorize: true, timestamp: true}),
+		new (winston.transports.Console)({level:'info', colorize: true, timestamp: true, handleExceptions:true}),
 		new (winston.transports.File)({level:'error', filename:'./log/error.log', handleExceptions: true, colorize: true, timestamp: true})
 	],
 	exceptionHandlers: [

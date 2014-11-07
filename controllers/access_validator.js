@@ -1,4 +1,4 @@
-var session_manager = require('./session_manager'):
+var session_manager = require('./session_manager');
 var validator = {};
 
 validator.access_validate = function(req, res, next) {
