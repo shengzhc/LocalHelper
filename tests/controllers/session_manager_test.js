@@ -3,34 +3,37 @@ var session_manager = require('../../controllers/session_manager');
 var express = require('express');
 var session = require('express-session');
 var request = require('supertest');
+var should = require('should');
 var assert = require('assert');
 
 describe('Session_Manager', function() {
-		beforeEach(function(done) {
-			req = {};
-			session({})(req, res, function() {
-				console.log('ddd');
-				done();
-			});
+		beforeEach(function() {
+			session_manager.secureTokens = [];
 		});
 
 		describe('#activateSession()', function() {
 			it('should be typeof function', function() {
-				assert.equal(typeof session_manager.activateSession, "function");
+				session_manager.activateSession.should.be.a.Function;
 			});
-			it('should create secureToken and non-empty', function(done) {
-				var req = {session:{}};
-				session_manager.activateSession(req, function(err) {
-					assert.ok(req.session.token);
-					assert.notEqual(session_manager.secureTokens.indexOf(req.session.token), -1);
-					done(err);
-				});
+
+			it('should store secureTokens and Set req.session.token', function() {
+				var app = express()
+					.use(session({secret: '_local_helper', resave:true, saveUninitialized:true}))
+					.use(function(req, res, next) {
+						session_manager.activateSession(req, function(err) {
+							req.session.token.should.not.be.empty;
+							session_manager.secureTokens.should.not.be.empty;
+							next(err);
+						});
+					})
+					.use(end);
+				request(app).get('/').end(function(err, res) {});
 			});
 		});
 
 		describe('#deactivateSession()', function(){
 			it('should be typeof function', function() {
-				assert.equal(typeof session_manager.deactivateSession, "function");
+				session_manager.deactivateSession.should.be.a.Function;
 			});
 			it('should clear request session and remove from session mananger', function(done) {
 				var token = 'test';
@@ -46,7 +49,11 @@ describe('Session_Manager', function() {
 
 		describe('#verifySession()', function() {
 			it('should be typeof function', function() {
-				assert.equal(typeof session_manager.verifySession, "function");
+				session_manager.verifySession.should.be.a.Function;
 			});
 		});
 });
+
+function end(req, res, next) {
+	res.end();
+}
