@@ -26,6 +26,7 @@
     "node-inspector": "*",
     "nodemon": "*",
     "request": "^*",
+    "supertest": "^0.14.0",
     "winston": "*"
   }
 }
