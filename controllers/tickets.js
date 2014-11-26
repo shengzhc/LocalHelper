@@ -9,20 +9,26 @@ var async = require('async');
  * @param next
  */
 exports.add = function(req, res, next) {
-	var ticket = new TicketModel({
-		summary: req.body.summary,
-		status: 'open',
-		category: req.body.category,
-		createdBy: req.body.createdBy
-	});
-	ticket.save(function (err, ticket) {
-		if (err) {
-			next(err);
-		}
-		res.write(JSON.stringify({
-			ticketId: ticket.id
-		}));
-	});
+    if (req.body) {
+        var ticket = new TicketModel({
+            summary: req.body.summary,
+            status: 'open',
+            category: req.body.category,
+            createdBy: req.body.createdBy
+        });
+        ticket.save(function (err, ticket) {
+            if (err) {
+                next(err);
+            }
+            res.write(JSON.stringify({
+                ticketId: ticket.id
+            }));
+        });
+    }
+    else {
+        next(new Error('No data passed in'));
+    }
+
 };
 
 /**
