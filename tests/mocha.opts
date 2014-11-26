@@ -1,0 +1,3 @@
+--require should
+--report Spec
+--ui bdd

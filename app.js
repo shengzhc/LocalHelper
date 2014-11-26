@@ -6,10 +6,11 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var mongodb = require('./components/mongodb');
+var session = require('express-session');
 
 global.logger = new (winston.Logger)({
 	transports:[
-		new (winston.transports.Console)({level:'info', colorize: true, timestamp: true}),
+		new (winston.transports.Console)({level:'info', colorize: true, timestamp: true, handleExceptions:true}),
 		new (winston.transports.File)({level:'error', filename:'./log/error.log', handleExceptions: true, colorize: true, timestamp: true})
 	],
 	exceptionHandlers: [
@@ -29,6 +30,7 @@ morgan.token('lp_startTime', function(req, res) {
 	return req.lp_startTime;
 });
 
+app.use(session({secret: '_local_helper', resave:true, saveUninitialized:true}));
 app.use(function(req, res, next) {
 	req.lp_startTime = new Date();
 	next();
@@ -47,6 +49,10 @@ mongodb.connect(function(err, db) {
 	app.use(router);
 	app.use(errorHandler);
 	app.use(morgan(':remote-addr - :remote-user :lp_startTime :response-time ms ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {stream: responseLogStream}));
+	app.use(function(req, res, next) {
+		// dummy function to end the expressjs middle-ware queue
+		res.end();
+	});
 	app.listen(3000, function(err) {
 		if (err) {
 			global.logger.error(err.toString());
